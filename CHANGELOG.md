@@ -1,4 +1,11 @@
 # CHANGELOG
+## [0.1.1] – Packaging Fix
+
+### Fixed
+- Ensure config file is included in the gem package
+- Remove built `.gem` artifacts from source control
+- Fix runtime load error when requiring the gem
+
 
 ## [0.1.0] – Initial Release
 
