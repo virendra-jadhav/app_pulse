@@ -1,0 +1,29 @@
+# frozen_string_literal: true
+
+require "spec_helper"
+
+RSpec.describe AppPulse::Writers::TextWriter do
+  let(:output_path) { "tmp/app_pulse_test" }
+  let(:writer) { described_class.new }
+
+  before do
+    AppPulse.config.output_path = output_path
+    FileUtils.rm_rf(output_path)
+  end
+
+  after do
+    FileUtils.rm_rf(output_path)
+  end
+
+  it "writes text formatted output" do
+    data = { foo: "bar", count: 2 }
+
+    writer.write(data)
+
+    file = Dir["#{output_path}/*.txt"].first
+    content = File.read(file)
+
+    expect(content).to include("foo=bar")
+    expect(content).to include("count=2")
+  end
+end
