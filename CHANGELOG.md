@@ -10,7 +10,7 @@
 - Configurable sampling rate
 - Fault-tolerant design (never breaks host app)
 
-### Notes
+### Notes  
 - File-based storage only (no DB writes)
 - Rails-agnostic core
 - Ruby 2.3+ compatible
