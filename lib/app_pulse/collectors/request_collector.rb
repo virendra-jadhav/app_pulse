@@ -9,6 +9,7 @@ module AppPulse
       class << self
         def collect(env:, status:, duration:, error: nil)
           return unless sample?
+          return unless slow_enough?(duration)
 
           data = build_payload(env, status, duration, error)
           writer.write(data)
@@ -36,6 +37,12 @@ module AppPulse
 
         def sample?
           rand <= AppPulse.config.sampling_rate
+        end
+        def slow_enough?(duration)
+          threshold = AppPulse.config.slow_threshold_ms
+          return true unless threshold
+
+          duration >= threshold
         end
       end
     end

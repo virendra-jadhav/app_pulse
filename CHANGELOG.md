@@ -1,4 +1,17 @@
 # CHANGELOG
+
+## [0.2.0] – Signal Filtering
+
+### Added
+- Configurable slow request threshold (`slow_threshold_ms`)
+- Ability to collect only slow requests without changing signal semantics
+
+### Notes
+- Filtering is applied after sampling
+- Default behavior is unchanged when the threshold is not set
+- No insights, rankings, or opinions are introduced
+- Backward compatible and opt-in
+
 ## [0.1.1] – Packaging Fix
 
 ### Fixed

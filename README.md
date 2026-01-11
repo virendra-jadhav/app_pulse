@@ -1,3 +1,5 @@
+[![Gem Version](https://badge.fury.io/rb/app_pulse.svg)](https://rubygems.org/gems/app_pulse)
+
 # app_pulse
 
 > **Lightweight request signal collection for Ruby applications**  
@@ -76,6 +78,7 @@ AppPulse.configure do |config|
   config.output_path = "log/app_pulse"
   config.output_format = :csv
   config.sampling_rate = 1.0
+  config.slow_threshold_ms = 500
 end
 ```
 
@@ -85,6 +88,7 @@ require "app_pulse"
 
 AppPulse.configure do |config|
   config.output_path = "log/app_pulse"
+  config.slow_threshold_ms = 500
 end
 
 use AppPulse::Middleware::Request
@@ -161,7 +165,36 @@ Sampling is:
 
 - Industry standard
 
-#Fault Tolerance
+## Slow Request Threshold
+
+By default, app_pulse collects all sampled requests.
+
+You can optionally configure a slow request threshold to collect
+only requests that exceed a given duration.
+
+```ruby
+config.slow_threshold_ms = 500
+```
+**Behavior:**
+
+- `nil` (default) → collect all requests
+
+- `500` → collect only requests taking 500ms or longer
+
+This helps reduce noise in high-traffic applications
+without changing the meaning of collected signals.
+
+**Notes:**
+
+- The threshold is applied after sampling
+
+- No errors or insights are inferred
+
+- This is a filtering mechanism, not an optimization
+
+--- 
+
+## Fault Tolerance
 
 - Errors inside app_pulse never break your app
 
@@ -171,7 +204,9 @@ Sampling is:
 
 - Observability must never affect availability.
 
-#Compatibility
+---
+
+## Compatibility
 **Ruby**
 
 - Ruby 2.3+ (tested on 2.3.8 and modern Ruby)
@@ -196,52 +231,115 @@ Sampling is:
 
 - No ActiveSupport
 
+---
+
+# Versioning
+
+`app_pulse` follows Semantic Versioning with a deliberately conservative approach.
+
+- **v0.x**
+
+  - Core behavior is stable
+
+  - Internal structure may evolve
+
+  - New features are additive and opt-in
+
+  - Breaking changes (if any) are documented clearly
+
+- **v1.0**
+
+  - Core APIs are frozen
+
+  - Extension points are finalized
+
+  - Intended for long-term production use
+
+Version bumps are intentional and documented in the changelog.
+
+---
 # Roadmap
-**v0.1.0 (current)**
 
-- Request lifecycle collection
+- **v0.1.x**
 
-- CSV / JSON / Text writers
+  - Request lifecycle signal collection
 
-- Rack middleware
+  - Rack middleware
 
-- File-based storage
+  - CSV / JSON / Text writers
 
-**Planned**
+  - File-based storage
 
-- v0.2.x → configurable thresholds
+  - Configurable sampling
 
-- v0.3.x → aggregation helpers
+  - Production-safe, fault-tolerant design
 
-- v1.0 → stable observability core
+- **v0.2.x**
 
-**Future Extensions (separate gems)**
+  - Configurable signal filtering
 
-- `app_pulse-sql`
+  - Slow request thresholds
 
-- `app_pulse-jobs`
+- **v0.3.x**
 
-- `app_pulse-exporter`
+  - Aggregation helpers
 
-- `app_pulse-dashboard`
+  - Slow endpoint identification
 
-**Development & Testing**
+  - Error frequency summaries
+
+  - Structured data preparation for reports
+
+- **v1.0**
+
+  - Stable observability core
+
+  - Frozen public APIs
+
+  - Extension-ready architecture
+
+- **Future Extensions (separate projects)**
+
+  - `app_pulse-sql` → database query timing
+
+  - `app_pulse-jobs` → background job tracking
+
+  - `app_pulse-exporter` → external systems
+
+  - `app_pulse-dashboard` → UI & reports
+
+---
+
+## Development & Testing
 
 - RSpec for unit tests
 
 - Tested with:
 
-- - Rails (modern Ruby)
+    - Rails (modern Ruby)
 
-- - Rack (Ruby 2.3)
+    - Rack (Ruby 2.3)
 
 - RuboCop compatible
 
 - No CI lock-in
 
-#License
+# License
 
 MIT License © Virendra Jadhav
+
+## Feedback & Roadmap
+
+app_pulse is intentionally minimal in its early versions.
+
+Feedback, real-world use cases, and design discussions are welcome.
+Please open an issue for:
+- feature requests
+- design questions
+- integration ideas
+
+Dashboards and insights are planned as separate projects.
+
 
 **Final Notes**
 
